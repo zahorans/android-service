@@ -40,6 +40,7 @@ public class MyService extends Service {
                 .setContentIntent(pendingIntent).build();
 
         startForeground(1337, notification);
+        Log.i("Ivan", "Service started");
     }
 
     @Override
@@ -61,5 +62,8 @@ public class MyService extends Service {
     public void onDestroy() {
         super.onDestroy();
         timer.cancel();
+        Intent broadcastIntent = new Intent("Restart");
+        getApplicationContext().sendBroadcast(broadcastIntent);
+        Log.i("Ivan", "Service Stopped");
     }
 }

@@ -20,17 +20,6 @@
         <service android:name=".MyService"
             android:enabled="true"
             android:stopWithTask="false" />
-
-        <receiver
-            android:name=".Restarter"
-            android:enabled="true"
-            android:exported="true"
-            android:label="RestartServiceWhenStopped">
-            <intent-filter>
-                <action android:name="Restart" />
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

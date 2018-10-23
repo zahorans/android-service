@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -18,7 +19,7 @@ import java.util.TimerTask;
 
 public class MyService extends Service {
 
-    private Timer timer;
+    private CountDownTimer timer;
 
     @Nullable
     @Override
@@ -29,7 +30,7 @@ public class MyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        timer = new Timer();
+
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
@@ -45,15 +46,20 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        timer.schedule(new TimerTask() {
+        super.onStartCommand(intent, flags, startId);
+
+        timer = new CountDownTimer(1000 * 60 * 60 * 24 * 365, 1000) {
             @Override
-            public void run() {
+            public void onTick(long millisUntilFinished) {
                 Log.i("Ivan", "tick");
             }
 
-        }, 0, 1000);
+            @Override
+            public void onFinish() {
 
-        super.onStartCommand(intent, flags, startId);
+            }
+        };
+        timer.start();
 
         return START_NOT_STICKY;
     }
@@ -61,9 +67,7 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        timer.cancel();
-        Intent broadcastIntent = new Intent("Restart");
-        getApplicationContext().sendBroadcast(broadcastIntent);
+//        timer.cancel();
         Log.i("Ivan", "Service Stopped");
     }
 }
